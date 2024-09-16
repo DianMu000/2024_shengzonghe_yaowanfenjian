@@ -9,6 +9,13 @@
 #define motor_y_ID 0x02
 #define motor_z_ID 0x03
 
+#define until_motor_x_get_flag_(x) \
+do{\
+			motor_x_send_get_flag_##x();\
+			Delay_ms(8);\
+		}\
+		while(!motor_x_read_get_flag_##x());\
+
 typedef struct{
     uint8_t *padd_rec_buf;
     uint8_t *padd_decode_buf;

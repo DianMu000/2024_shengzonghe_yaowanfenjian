@@ -1,11 +1,9 @@
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\Keil 5\keil 5\Core\ARM\ARMCC\Bin'
 Build target 'Target 1'
 compiling bsp_motor.c...
+compiling main.c...
+compiling position.c...
 linking...
-.\Objects\project.axf: Error: L6218E: Undefined symbol motor_x_init (referred from main.o).
-Not enough information to list image symbols.
-Not enough information to list load addresses in the image map.
-Finished: 2 information, 0 warning and 1 error messages.
-".\Objects\project.axf" - 1 Error(s), 0 Warning(s).
-Target not created.
-Build Time Elapsed:  00:00:01
+Program Size: Code=3408 RO-data=268 RW-data=20 ZI-data=1644  
+".\Objects\project.axf" - 0 Error(s), 0 Warning(s).
+Build Time Elapsed:  00:00:02

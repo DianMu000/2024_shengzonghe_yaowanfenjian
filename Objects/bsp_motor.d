@@ -30,3 +30,4 @@
 .\objects\bsp_motor.o: .\Library\stm32f10x_wwdg.h
 .\objects\bsp_motor.o: .\Library\misc.h
 .\objects\bsp_motor.o: D:\Keil 5\keil 5\Core\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\bsp_motor.o: .\System\delay.h

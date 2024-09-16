@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F10X_MD</Define>
               <Undefine></Undefine>
-              <IncludePath>.\User;.\Start;.\Library;.\System;.\Hardware</IncludePath>
+              <IncludePath>.\User;.\Start;.\Library;.\System;.\Hardware;.\MiddleWare</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -718,6 +718,21 @@
               <FileName>bsp_motor.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Hardware\bsp_motor.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middleware</GroupName>
+          <Files>
+            <File>
+              <FileName>position.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MiddleWare\position.c</FilePath>
+            </File>
+            <File>
+              <FileName>position.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\MiddleWare\position.h</FilePath>
             </File>
           </Files>
         </Group>

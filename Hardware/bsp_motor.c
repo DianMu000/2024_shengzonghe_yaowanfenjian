@@ -1,7 +1,11 @@
 #include "bsp_motor.h"
 #include "stdlib.h"
-extern serial_motor_buffer_t* serial_motor_buffer;
+#include "delay.h"
+extern serial_motor_buffer_t serial_motor_buffer;
 
+
+
+		
 /// @brief 串口1发送byte
 /// @param data 
 static void SendByte(uint8_t data){
@@ -10,14 +14,100 @@ static void SendByte(uint8_t data){
 }
 
 static uint8_t GetBufBitsNoRead(const serial_motor_buffer_t *serial_motor_buffer){
-    return (int8_t)(((int16_t)(serial_motor_buffer->write_index) - (int16_t)(serial_motor_buffer->write_index)) + (int16_t)(serial_motor_buffer->rec_size)) % (int16_t)(serial_motor_buffer->rec_size);
+    return (int8_t)(((int16_t)(serial_motor_buffer->write_index) - (int16_t)(serial_motor_buffer->read_index)) + (int16_t)(serial_motor_buffer->rec_size)) % (int16_t)(serial_motor_buffer->rec_size);
 }
 
 static uint8_t read_byte(void){
-    uint8_t byte = serial_motor_buffer->padd_rec_buf[serial_motor_buffer->read_index];
-    serial_motor_buffer->read_index = (serial_motor_buffer->read_index + 1) % serial_motor_buffer->rec_size;
-
+    uint8_t byte = serial_motor_buffer.padd_rec_buf[serial_motor_buffer.read_index];
+    serial_motor_buffer.read_index = (serial_motor_buffer.read_index + 1) % serial_motor_buffer.rec_size;
+                                                                                                                                                                                                                                                                                                                
     return byte;
+}
+
+
+
+/// @brief 读回零命令接返回标志
+/// @param  void
+/// @return  读到返回1，读不到返回0
+ static uint8_t motor_x_read_get_set0_recieve(void){
+
+    while(GetBufBitsNoRead(&serial_motor_buffer) != 0){
+        if(read_byte() == 0x01 ){
+			while(GetBufBitsNoRead(&serial_motor_buffer) >= 3){
+				if(read_byte() == 0x9A && read_byte() == 0x02 && read_byte() == 0x6B){
+					return 1;
+				}
+				else{
+					return 0;
+				}
+					
+			}
+        }
+    }
+    return 0;
+}
+ 
+/// @brief 读位置控制命令返回标志
+/// @param  void
+/// @return  读到返回1，读不到返回0
+ static uint8_t motor_x_read_get_position_control_recieve(void){
+
+    while(GetBufBitsNoRead(&serial_motor_buffer) != 0){
+        if(read_byte() == 0x01 ){
+			while(GetBufBitsNoRead(&serial_motor_buffer) >= 3){
+				if(read_byte() == 0xFD && read_byte() == 0x02 && read_byte() == 0x6B){
+					return 1;
+				}
+				else{
+					return 0;
+				}
+					
+			}
+        }
+    }
+    return 0;
+}
+ 
+/// @brief 读速度控制命令返回标志
+/// @param  void
+/// @return  读到返回1，读不到返回0
+ static uint8_t motor_x_read_get_speed_control_recieve(void){
+
+    while(GetBufBitsNoRead(&serial_motor_buffer) != 0){
+        if(read_byte() == 0x01 ){
+			while(GetBufBitsNoRead(&serial_motor_buffer) >= 3){
+				if(read_byte() == 0xFE && read_byte() == 0x02 && read_byte() == 0x6B){
+					return 1;
+				}
+				else{
+					return 0;
+				}
+					
+			}
+        }
+    }
+    return 0;
+}
+ 
+/// @brief 读停止命令返回标志
+/// @param  void
+/// @return  读到返回1，读不到返回0
+ static uint8_t motor_x_read_get_stop_recieve(void){
+
+    while(GetBufBitsNoRead(&serial_motor_buffer) != 0){
+        if(read_byte() == 0x01 ){
+			while(GetBufBitsNoRead(&serial_motor_buffer) >= 3){
+				if(read_byte() == 0xF6 && read_byte() == 0x02 && read_byte() == 0x6B){
+					return 1;
+				}
+				else{
+					return 0;
+				}
+					
+			}
+        }
+    }
+    return 0;
 }
 uint8_t motor_init(serial_motor_buffer_t* serial_motor_buffer){
     /*Part 1 System config*/
@@ -77,15 +167,17 @@ uint8_t motor_init(serial_motor_buffer_t* serial_motor_buffer){
 /// @param speed 速度
 /// @return 
 uint8_t motor_x_move_speed(uint8_t direction, uint16_t speed){
-    
-    SendByte(motor_x_ID);
-    SendByte(0xf6);
-    SendByte(direction);
-    SendByte((uint8_t)(speed & 0x00ff));
-    SendByte((uint8_t)((speed >> 8) & 0x00ff));
-    SendByte(0x00);
-    SendByte(0x00);
-    SendByte(0x6B);
+    do{  
+        SendByte(motor_x_ID);
+        SendByte(0xf6);
+        SendByte(direction);
+        SendByte((uint8_t)(speed >> 8) & 0x00ff);
+        SendByte((uint8_t)(speed & 0x00ff));
+        SendByte(0x00);
+        SendByte(0x00);
+        SendByte(0x6B);
+		Delay_ms(8);
+  }while(!motor_x_read_get_speed_control_recieve());
     return 0;
 }
 
@@ -95,19 +187,23 @@ uint8_t motor_x_move_speed(uint8_t direction, uint16_t speed){
 /// @param pulse 脉冲
 /// @return 
 uint8_t motor_x_move_position(uint8_t direction, uint16_t speed, uint32_t pulse){
-    SendByte(motor_x_ID);
-    SendByte(0xFD);
-    SendByte(direction);
-    SendByte((uint8_t)(speed & 0x00ff));
-    SendByte((uint8_t)((speed >> 8) & 0x00ff));
-    SendByte(0x00);
-    SendByte((uint8_t)(speed & 0x00ff));
-    SendByte((uint8_t)((speed >> 8) & 0x00ff));
-    SendByte((uint8_t)((speed >> 16) & 0x00ff));
-    SendByte((uint8_t)((speed >> 24) & 0x00ff));
-    SendByte(0x00);
-    SendByte(0x00);
-    SendByte(0x6B);
+    do{
+        SendByte(motor_x_ID);
+        SendByte(0xFD);
+        SendByte(direction);
+        SendByte((uint8_t)((speed >> 8) & 0x00ff));
+        SendByte((uint8_t)(speed & 0x00ff));
+        SendByte(0x00);
+        SendByte((uint8_t)((pulse >> 24) & 0xff));
+        SendByte((uint8_t)((pulse >> 16) & 0xff));
+        SendByte((uint8_t)((pulse >> 8) & 0xff));
+        SendByte((uint8_t)(pulse & 0xff));
+        SendByte(0x00);
+        SendByte(0x00);
+        SendByte(0x6B);
+		Delay_ms(8);
+    }while(!motor_x_read_get_position_control_recieve());
+	   
     return 0;
 }
 
@@ -115,11 +211,14 @@ uint8_t motor_x_move_position(uint8_t direction, uint16_t speed, uint32_t pulse)
 /// @param  
 /// @return 
 uint8_t motor_x_stop(void){
-    SendByte(motor_x_ID);
-    SendByte(0xFE);
-    SendByte(0x98);
-    SendByte(0x00);
-    SendByte(0x6B);
+    do{
+        SendByte(motor_x_ID);
+        SendByte(0xFE);
+        SendByte(0x98);
+        SendByte(0x00);
+        SendByte(0x6B);
+		Delay_ms(8);
+    }while(!motor_x_read_get_stop_recieve());
     return 0;
 }
 
@@ -127,21 +226,27 @@ uint8_t motor_x_stop(void){
 /// @param  
 /// @return 
 uint8_t motor_x_set0(void){
-    SendByte(motor_x_ID);
-    SendByte(0x9A);
-    SendByte(0x02);
-    SendByte(0x00);
-    SendByte(0x6B);
+    do{
+        SendByte(motor_x_ID);
+        SendByte(0x9A);
+        SendByte(0x02);
+        SendByte(0x00);
+        SendByte(0x6B);
+		Delay_ms(8);
+    }while(!motor_x_read_get_set0_recieve());    
     return 0;
+
 }
 
 /// @brief 发送回零标志位查询命令
 /// @param  
 /// @return 
 uint8_t motor_x_send_get_flag_set0(void){
-    SendByte(motor_x_ID);
-    SendByte(0x3B);
-    SendByte(0x6B);
+
+        SendByte(motor_x_ID);
+        SendByte(0x3B);
+        SendByte(0x6B);
+		Delay_ms(8);  
     return 0;
 } //0x3B
 
@@ -149,17 +254,17 @@ uint8_t motor_x_send_get_flag_set0(void){
 /// @param  void
 /// @return 1为回零成功，0为回零失败
 uint8_t motor_x_read_get_flag_set0(void){
-    while(GetBufBitsNoRead(serial_motor_buffer) != 0){
+    while(GetBufBitsNoRead(&serial_motor_buffer) != 0){
         if(read_byte() == motor_x_ID){
             if(read_byte() == 0x3B){
-                while(GetBufBitsNoRead(serial_motor_buffer) >= 2){
-                    if(serial_motor_buffer->padd_rec_buf[serial_motor_buffer->read_index + 1] == 0x6B){
-                        uint8_t flag = serial_motor_buffer->padd_rec_buf[serial_motor_buffer->read_index];
+                while(GetBufBitsNoRead(&serial_motor_buffer) >= 2){
+                    if(serial_motor_buffer.padd_rec_buf[(serial_motor_buffer.read_index + 1) % serial_motor_buffer.rec_size] == 0x6B){
+                        uint8_t flag = serial_motor_buffer.padd_rec_buf[serial_motor_buffer.read_index];
                         uint8_t result = ~((flag & 0x04) | (flag & 0x08));
-                        serial_motor_buffer->read_index = (serial_motor_buffer->read_index + 2) % serial_motor_buffer->rec_size;
+                        serial_motor_buffer.read_index = (serial_motor_buffer.read_index + 2) % serial_motor_buffer.rec_size;
                         return result;
                     }
-                    serial_motor_buffer->read_index = (serial_motor_buffer->read_index + 2) % serial_motor_buffer->rec_size;
+                    serial_motor_buffer.read_index = (serial_motor_buffer.read_index + 2) % serial_motor_buffer.rec_size;
                 }
             }
         }
@@ -170,9 +275,10 @@ uint8_t motor_x_read_get_flag_set0(void){
 /// @param  
 /// @return 
 uint8_t motor_x_send_get_flag_arrive (void) {
-    SendByte(motor_x_ID);
-    SendByte(0x3B);
-    SendByte(0x6B);
+        SendByte(motor_x_ID);
+        SendByte(0x3A);
+        SendByte(0x6B);
+		Delay_ms(8);
     return 0;
 } //0x3B
 
@@ -180,17 +286,17 @@ uint8_t motor_x_send_get_flag_arrive (void) {
 /// @param  void
 /// @return 0为未到位，1为到位
 uint8_t motor_x_read_get_flag_arrive(void){
-    while(GetBufBitsNoRead(serial_motor_buffer) != 0){
+    while(GetBufBitsNoRead(&serial_motor_buffer) != 0){
         if(read_byte() == motor_x_ID){
             if(read_byte() == 0x3A){
-                while(GetBufBitsNoRead(serial_motor_buffer) >= 2){
-                    if(serial_motor_buffer->padd_rec_buf[serial_motor_buffer->read_index + 1] == 0x6B){
-                        uint8_t flag = serial_motor_buffer->padd_rec_buf[serial_motor_buffer->read_index];
+                while(GetBufBitsNoRead(&serial_motor_buffer) >= 2){
+                    if(serial_motor_buffer.padd_rec_buf[(serial_motor_buffer.read_index + 1) % serial_motor_buffer.rec_size] == 0x6B){
+                        uint8_t flag = serial_motor_buffer.padd_rec_buf[serial_motor_buffer.read_index];
                         uint8_t result = flag & 0x02;
-                        serial_motor_buffer->read_index = (serial_motor_buffer->read_index + 2) % serial_motor_buffer->rec_size;
+                        serial_motor_buffer.read_index = (serial_motor_buffer.read_index + 2) % serial_motor_buffer.rec_size;
                         return result;
                     }
-                    serial_motor_buffer->read_index = (serial_motor_buffer->read_index + 2) % serial_motor_buffer->rec_size;
+                    serial_motor_buffer.read_index = (serial_motor_buffer.read_index + 2) % serial_motor_buffer.rec_size;
                 }
             }
         }
@@ -202,10 +308,9 @@ uint8_t motor_x_read_get_flag_arrive(void){
 /// @param  
 void USART1_IRQHandler(void){
     if(USART_GetITStatus(USART1,USART_IT_RXNE)==1){
-        serial_motor_buffer->padd_rec_buf[serial_motor_buffer->write_index] = (uint8_t)USART_ReceiveData(USART1);
-        serial_motor_buffer->write_index = (serial_motor_buffer->write_index + 1) % serial_motor_buffer->rec_size;
+        serial_motor_buffer.padd_rec_buf[serial_motor_buffer.write_index] = (uint8_t)USART_ReceiveData(USART1);
+        serial_motor_buffer.write_index = (serial_motor_buffer.write_index + 1) % serial_motor_buffer.rec_size;
 
         USART_ClearITPendingBit(USART1,USART_IT_RXNE);
     }
 }
-
