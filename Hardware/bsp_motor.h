@@ -5,16 +5,16 @@
 #define size_motor_rec_buffer 50
 #define size_motor_decode_buffer 50
 
-#define motor_x_ID 0x01
-#define motor_y_ID 0x02
-#define motor_z_ID 0x03
+#define motor_x_id 0x01
+#define motor_y_id 0x02
+#define motor_z_id 0x03
 
-#define until_motor_x_get_flag_(x) \
+#define until_motor_get_flag_(id, order) \
 do{\
-			motor_x_send_get_flag_##x();\
+			motor_send_get_flag_##order(id);\
 			Delay_ms(8);\
 		}\
-		while(!motor_x_read_get_flag_##x());\
+		while(!motor_read_get_flag_##order(id));\
 
 typedef struct{
     uint8_t *padd_rec_buf;
@@ -28,19 +28,19 @@ typedef struct{
 
 uint8_t motor_init(serial_motor_buffer_t* serial_motor_buffer);
 
-uint8_t motor_x_move_speed(uint8_t direction, uint16_t speed);
+uint8_t motor_move_speed(uint8_t id, uint8_t direction, uint16_t speed);
 
-uint8_t motor_x_move_position(uint8_t direction, uint16_t speed, uint32_t pulse);
+uint8_t motor_move_position(uint8_t id, uint8_t direction, uint16_t speed, uint32_t pulse);
 
-uint8_t motor_x_stop(void);
+uint8_t motor_stop(uint8_t id);
 
-uint8_t motor_x_set0(void);
+uint8_t motor_set0(uint8_t id);
 
-uint8_t motor_x_send_get_flag_set0(void); //0x3B
+uint8_t motor_send_get_flag_set0(uint8_t id); //0x3B
 
-uint8_t motor_x_read_get_flag_set0(void);
+uint8_t motor_read_get_flag_set0(uint8_t id);
 
-uint8_t motor_x_send_get_flag_arrive(void);
+uint8_t motor_send_get_flag_arrive(uint8_t id);
 
-uint8_t motor_x_read_get_flag_arrive(void);
+uint8_t motor_read_get_flag_arrive(uint8_t id);
 #endif

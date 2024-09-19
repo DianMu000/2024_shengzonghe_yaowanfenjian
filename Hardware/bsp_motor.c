@@ -29,10 +29,10 @@ static uint8_t read_byte(void){
 /// @brief 读回零命令接返回标志
 /// @param  void
 /// @return  读到返回1，读不到返回0
- static uint8_t motor_x_read_get_set0_recieve(void){
+ static uint8_t motor_read_get_set0_recieve(uint8_t id){
 
     while(GetBufBitsNoRead(&serial_motor_buffer) != 0){
-        if(read_byte() == 0x01 ){
+        if(read_byte() == id ){
 			while(GetBufBitsNoRead(&serial_motor_buffer) >= 3){
 				if(read_byte() == 0x9A && read_byte() == 0x02 && read_byte() == 0x6B){
 					return 1;
@@ -50,10 +50,10 @@ static uint8_t read_byte(void){
 /// @brief 读位置控制命令返回标志
 /// @param  void
 /// @return  读到返回1，读不到返回0
- static uint8_t motor_x_read_get_position_control_recieve(void){
+ static uint8_t motor_read_get_position_control_recieve(uint8_t id){
 
     while(GetBufBitsNoRead(&serial_motor_buffer) != 0){
-        if(read_byte() == 0x01 ){
+        if(read_byte() == id ){
 			while(GetBufBitsNoRead(&serial_motor_buffer) >= 3){
 				if(read_byte() == 0xFD && read_byte() == 0x02 && read_byte() == 0x6B){
 					return 1;
@@ -71,10 +71,10 @@ static uint8_t read_byte(void){
 /// @brief 读速度控制命令返回标志
 /// @param  void
 /// @return  读到返回1，读不到返回0
- static uint8_t motor_x_read_get_speed_control_recieve(void){
+ static uint8_t motor_read_get_speed_control_recieve(uint8_t id){
 
     while(GetBufBitsNoRead(&serial_motor_buffer) != 0){
-        if(read_byte() == 0x01 ){
+        if(read_byte() == id ){
 			while(GetBufBitsNoRead(&serial_motor_buffer) >= 3){
 				if(read_byte() == 0xFE && read_byte() == 0x02 && read_byte() == 0x6B){
 					return 1;
@@ -92,10 +92,10 @@ static uint8_t read_byte(void){
 /// @brief 读停止命令返回标志
 /// @param  void
 /// @return  读到返回1，读不到返回0
- static uint8_t motor_x_read_get_stop_recieve(void){
+ static uint8_t motor_read_get_stop_recieve(uint8_t id){
 
     while(GetBufBitsNoRead(&serial_motor_buffer) != 0){
-        if(read_byte() == 0x01 ){
+        if(read_byte() == id ){
 			while(GetBufBitsNoRead(&serial_motor_buffer) >= 3){
 				if(read_byte() == 0xF6 && read_byte() == 0x02 && read_byte() == 0x6B){
 					return 1;
@@ -166,9 +166,9 @@ uint8_t motor_init(serial_motor_buffer_t* serial_motor_buffer){
 /// @param direction 方向
 /// @param speed 速度
 /// @return 
-uint8_t motor_x_move_speed(uint8_t direction, uint16_t speed){
+uint8_t motor_move_speed(uint8_t id, uint8_t direction, uint16_t speed){
     do{  
-        SendByte(motor_x_ID);
+        SendByte(id);
         SendByte(0xf6);
         SendByte(direction);
         SendByte((uint8_t)(speed >> 8) & 0x00ff);
@@ -177,7 +177,7 @@ uint8_t motor_x_move_speed(uint8_t direction, uint16_t speed){
         SendByte(0x00);
         SendByte(0x6B);
 		Delay_ms(8);
-  }while(!motor_x_read_get_speed_control_recieve());
+  }while(!motor_read_get_speed_control_recieve(id));
     return 0;
 }
 
@@ -186,9 +186,9 @@ uint8_t motor_x_move_speed(uint8_t direction, uint16_t speed){
 /// @param speed 速度
 /// @param pulse 脉冲
 /// @return 
-uint8_t motor_x_move_position(uint8_t direction, uint16_t speed, uint32_t pulse){
+uint8_t motor_move_position(uint8_t id, uint8_t direction, uint16_t speed, uint32_t pulse){
     do{
-        SendByte(motor_x_ID);
+        SendByte(id);
         SendByte(0xFD);
         SendByte(direction);
         SendByte((uint8_t)((speed >> 8) & 0x00ff));
@@ -202,7 +202,7 @@ uint8_t motor_x_move_position(uint8_t direction, uint16_t speed, uint32_t pulse)
         SendByte(0x00);
         SendByte(0x6B);
 		Delay_ms(8);
-    }while(!motor_x_read_get_position_control_recieve());
+    }while(!motor_read_get_position_control_recieve(id));
 	   
     return 0;
 }
@@ -210,30 +210,30 @@ uint8_t motor_x_move_position(uint8_t direction, uint16_t speed, uint32_t pulse)
 /// @brief 发送强制停止命令
 /// @param  
 /// @return 
-uint8_t motor_x_stop(void){
+uint8_t motor_stop(uint8_t id){
     do{
-        SendByte(motor_x_ID);
+        SendByte(id);
         SendByte(0xFE);
         SendByte(0x98);
         SendByte(0x00);
         SendByte(0x6B);
 		Delay_ms(8);
-    }while(!motor_x_read_get_stop_recieve());
+    }while(!motor_read_get_stop_recieve(id));
     return 0;
 }
 
 /// @brief 发送回零命令
 /// @param  
 /// @return 
-uint8_t motor_x_set0(void){
+uint8_t motor_set0(uint8_t id){
     do{
-        SendByte(motor_x_ID);
+        SendByte(id);
         SendByte(0x9A);
         SendByte(0x02);
         SendByte(0x00);
         SendByte(0x6B);
 		Delay_ms(8);
-    }while(!motor_x_read_get_set0_recieve());    
+    }while(!motor_read_get_set0_recieve(id));    
     return 0;
 
 }
@@ -241,9 +241,9 @@ uint8_t motor_x_set0(void){
 /// @brief 发送回零标志位查询命令
 /// @param  
 /// @return 
-uint8_t motor_x_send_get_flag_set0(void){
+uint8_t motor_send_get_flag_set0(uint8_t id){
 
-        SendByte(motor_x_ID);
+        SendByte(id);
         SendByte(0x3B);
         SendByte(0x6B);
 		Delay_ms(8);  
@@ -253,9 +253,9 @@ uint8_t motor_x_send_get_flag_set0(void){
 /// @brief 读回零标志位，1为回零成功，0为回零失败
 /// @param  void
 /// @return 1为回零成功，0为回零失败
-uint8_t motor_x_read_get_flag_set0(void){
+uint8_t motor_read_get_flag_set0(uint8_t id){
     while(GetBufBitsNoRead(&serial_motor_buffer) != 0){
-        if(read_byte() == motor_x_ID){
+        if(read_byte() == id){
             if(read_byte() == 0x3B){
                 while(GetBufBitsNoRead(&serial_motor_buffer) >= 2){
                     if(serial_motor_buffer.padd_rec_buf[(serial_motor_buffer.read_index + 1) % serial_motor_buffer.rec_size] == 0x6B){
@@ -274,8 +274,8 @@ uint8_t motor_x_read_get_flag_set0(void){
 /// @brief 发送电机标志位查询命令
 /// @param  
 /// @return 
-uint8_t motor_x_send_get_flag_arrive (void) {
-        SendByte(motor_x_ID);
+uint8_t motor_send_get_flag_arrive (uint8_t id) {
+        SendByte(id);
         SendByte(0x3A);
         SendByte(0x6B);
 		Delay_ms(8);
@@ -285,9 +285,9 @@ uint8_t motor_x_send_get_flag_arrive (void) {
 /// @brief 读电机位置模式到位标志位，0为未到位，1为到位
 /// @param  void
 /// @return 0为未到位，1为到位
-uint8_t motor_x_read_get_flag_arrive(void){
+uint8_t motor_read_get_flag_arrive(uint8_t id){
     while(GetBufBitsNoRead(&serial_motor_buffer) != 0){
-        if(read_byte() == motor_x_ID){
+        if(read_byte() == id){
             if(read_byte() == 0x3A){
                 while(GetBufBitsNoRead(&serial_motor_buffer) >= 2){
                     if(serial_motor_buffer.padd_rec_buf[(serial_motor_buffer.read_index + 1) % serial_motor_buffer.rec_size] == 0x6B){
