@@ -1,6 +1,6 @@
 Dependencies for Project 'project', Target 'Target 1': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
-F (.\User\main.c)(0x66EC49F9)(--c99 -c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\User -I .\Start -I .\Library -I .\System -I .\Hardware -I .\MiddleWare-I"D:\Keil 5\keil 5\Pack\Keil\STM32F1xx_DFP\2.4.1\Device\Include"-D__UVISION_VERSION="534" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+F (.\User\main.c)(0x66EC59BC)(--c99 -c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\User -I .\Start -I .\Library -I .\System -I .\Hardware -I .\MiddleWare-I"D:\Keil 5\keil 5\Pack\Keil\STM32F1xx_DFP\2.4.1\Device\Include"-D__UVISION_VERSION="534" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
 I (.\Start\stm32f10x.h)(0x4D783CB4)
 I (.\Start\core_cm3.h)(0x4D523B58)
 I (D:\Keil 5\keil 5\Core\ARM\ARMCC\include\stdint.h)(0x5E8E3CC2)
@@ -909,7 +909,7 @@ I (.\Library\stm32f10x_wwdg.h)(0x4D783BB4)
 I (.\Library\misc.h)(0x4D783BB4)
 I (D:\Keil 5\keil 5\Core\ARM\ARMCC\include\stdlib.h)(0x5E8E3CC2)
 I (.\System\delay.h)(0x66E833BE)
-F (.\MiddleWare\position.c)(0x66E51BE1)(--c99 -c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\User -I .\Start -I .\Library -I .\System -I .\Hardware -I .\MiddleWare-I"D:\Keil 5\keil 5\Pack\Keil\STM32F1xx_DFP\2.4.1\Device\Include"-D__UVISION_VERSION="534" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD-o .\objects\position.o --omf_browse .\objects\position.crf --depend .\objects\position.d)
+F (.\MiddleWare\position.c)(0x66EE9EEB)(--c99 -c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\User -I .\Start -I .\Library -I .\System -I .\Hardware -I .\MiddleWare-I"D:\Keil 5\keil 5\Pack\Keil\STM32F1xx_DFP\2.4.1\Device\Include"-D__UVISION_VERSION="534" -DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD-o .\objects\position.o --omf_browse .\objects\position.crf --depend .\objects\position.d)
 I (.\Hardware\bsp_motor.h)(0x66EC496A)
 I (.\Start\stm32f10x.h)(0x4D783CB4)
 I (.\Start\core_cm3.h)(0x4D523B58)
@@ -939,4 +939,5 @@ I (.\Library\stm32f10x_tim.h)(0x4D783BB4)
 I (.\Library\stm32f10x_usart.h)(0x4D783BB4)
 I (.\Library\stm32f10x_wwdg.h)(0x4D783BB4)
 I (.\Library\misc.h)(0x4D783BB4)
-F (.\MiddleWare\position.h)(0x66E8757A)()
+I (MiddleWare\position.h)(0x66EE9F09)
+F (.\MiddleWare\position.h)(0x66EE9F09)()

@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F10X_MD</Define>
               <Undefine></Undefine>
-              <IncludePath>.\User;.\Start;.\Library;.\System;.\Hardware;.\MiddleWare</IncludePath>
+              <IncludePath>.\User;.\Start;.\Library;.\System;.\MiddleWare;.\Hardware</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

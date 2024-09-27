@@ -12,11 +12,11 @@ int main(void)
 {
 	motor_init(&serial_motor_buffer);
 	
-	motor_set0(motor_x_id);
+	motor_move_speed(motor_x_id, 1, 300);
 	
-	until_motor_get_flag_(motor_x_id, set0);
+//	until_motor_get_flag_(motor_x_id, set0);
 
-	motor_move_position(motor_x_id, 1, 30 ,16000);
+//	motor_move_position(motor_x_id, 1, 300 ,16000);
 	
 
 

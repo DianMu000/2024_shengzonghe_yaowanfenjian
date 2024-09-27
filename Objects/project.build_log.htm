@@ -21,16 +21,34 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.8.0
 Dialog DLL:      TCM.DLL V1.48.0.0
  
 <h2>Project:</h2>
-d:\0Code\git\MachineEvo-2024_shengzonghe_yaowanfenjian_laixingchao\project.uvprojx
+d:\0Code\git\shengzonghe_yaowanfenjian_laixingchao\project.uvprojx
 Project File Date:  09/14/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\Keil 5\keil 5\Core\ARM\ARMCC\Bin'
 Build target 'Target 1'
-compiling bsp_motor.c...
+compiling position.c...
+MiddleWare\position.c(7): warning:  #223-D: function "approach_position_approach_method" declared implicitly
+      approach(position_approach_method, x, y);
+MiddleWare\position.c(8): warning:  #940-D: missing return statement at end of non-void function "position_approach" 
+  } 
+MiddleWare\position.c(13): warning:  #940-D: missing return statement at end of non-void function "map_distance_to_pulse" 
+  }
+MiddleWare\position.c(17): warning:  #940-D: missing return statement at end of non-void function "PID_calculate" 
+  }
+MiddleWare\position.c(20): warning:  #1-D: last line of file ends without a newline
+   
+MiddleWare\position.c(11): warning:  #177-D: function "map_distance_to_pulse"  was declared but never referenced
+  static uint8_t map_distance_to_pulse(uint16_t distance){
+MiddleWare\position.c(15): warning:  #177-D: function "PID_calculate"  was declared but never referenced
+  static uint8_t PID_calculate(uint16_t target, uint16_t error){
+MiddleWare\position.c: 7 warnings, 0 errors
 linking...
-Program Size: Code=3432 RO-data=268 RW-data=20 ZI-data=1644  
-".\Objects\project.axf" - 0 Error(s), 0 Warning(s).
+.\Objects\project.axf: Error: L6218E: Undefined symbol approach_position_approach_method (referred from position.o).
+Not enough information to list image symbols.
+Not enough information to list load addresses in the image map.
+Finished: 2 information, 0 warning and 1 error messages.
+".\Objects\project.axf" - 1 Error(s), 7 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -43,7 +61,8 @@ Package Vendor: Keil
   D:\Keil 5\keil 5\Pack\Keil\STM32F1xx_DFP\2.4.1\Device\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:02
+Target not created.
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>

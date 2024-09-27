@@ -29,3 +29,4 @@
 .\objects\position.o: .\Library\stm32f10x_usart.h
 .\objects\position.o: .\Library\stm32f10x_wwdg.h
 .\objects\position.o: .\Library\misc.h
+.\objects\position.o: MiddleWare\position.h
