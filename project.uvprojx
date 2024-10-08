@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F10X_MD</Define>
               <Undefine></Undefine>
-              <IncludePath>.\User;.\Start;.\Library;.\System;.\MiddleWare;.\Hardware</IncludePath>
+              <IncludePath>.\User;.\Start;.\System;.\Library;.\Hardware;.\MiddleWare</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -704,6 +704,16 @@
               <FileType>5</FileType>
               <FilePath>.\System\OLED_Font.h</FilePath>
             </File>
+            <File>
+              <FileName>SerialDebug.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\System\SerialDebug.h</FilePath>
+            </File>
+            <File>
+              <FileName>SerialDebug.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\System\SerialDebug.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -719,20 +729,40 @@
               <FileType>1</FileType>
               <FilePath>.\Hardware\bsp_motor.c</FilePath>
             </File>
+            <File>
+              <FileName>pump.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\pump.c</FilePath>
+            </File>
+            <File>
+              <FileName>pump.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\pump.h</FilePath>
+            </File>
+            <File>
+              <FileName>serial_openmv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\serial_openmv.c</FilePath>
+            </File>
+            <File>
+              <FileName>serial_openmv.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\serial_openmv.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Middleware</GroupName>
           <Files>
             <File>
-              <FileName>position.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\MiddleWare\position.c</FilePath>
-            </File>
-            <File>
               <FileName>position.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\MiddleWare\position.h</FilePath>
+            </File>
+            <File>
+              <FileName>position.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MiddleWare\position.c</FilePath>
             </File>
           </Files>
         </Group>

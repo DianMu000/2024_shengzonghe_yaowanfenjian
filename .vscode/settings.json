@@ -13,6 +13,7 @@
         "tuple": "c",
         "type_traits": "c",
         "utility": "c",
-        "bsp_motor.h": "c"
+        "bsp_motor.h": "c",
+        "delay.h": "c"
     }
 }

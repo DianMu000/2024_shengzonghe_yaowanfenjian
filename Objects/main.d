@@ -31,4 +31,5 @@
 .\objects\main.o: .\System\Delay.h
 .\objects\main.o: .\System\OLED.h
 .\objects\main.o: .\Hardware\bsp_motor.h
-.\objects\main.o: D:\Keil 5\keil 5\Core\ARM\ARMCC\Bin\..\include\stdbool.h
+.\objects\main.o: .\Hardware\serial_blueteeth.h
+.\objects\main.o: .\Hardware\pump.h

@@ -30,7 +30,8 @@
 ".\objects\delay.o"
 ".\objects\oled.o"
 ".\objects\bsp_motor.o"
-".\objects\position.o"
+".\objects\pump.o"
+".\objects\serial_blueteeth.o"
 --strict --scatter ".\Objects\project.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

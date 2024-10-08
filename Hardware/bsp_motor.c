@@ -17,7 +17,7 @@ static uint8_t GetBufBitsNoRead(const serial_motor_buffer_t *serial_motor_buffer
     return (int8_t)(((int16_t)(serial_motor_buffer->write_index) - (int16_t)(serial_motor_buffer->read_index)) + (int16_t)(serial_motor_buffer->rec_size)) % (int16_t)(serial_motor_buffer->rec_size);
 }
 
-static uint8_t read_byte(void){
+static uint8_t read_byte(){
     uint8_t byte = serial_motor_buffer.padd_rec_buf[serial_motor_buffer.read_index];
     serial_motor_buffer.read_index = (serial_motor_buffer.read_index + 1) % serial_motor_buffer.rec_size;
                                                                                                                                                                                                                                                                                                                 
@@ -34,14 +34,14 @@ static uint8_t read_byte(void){
     while(GetBufBitsNoRead(&serial_motor_buffer) != 0){
         if(read_byte() == id ){
 			while(GetBufBitsNoRead(&serial_motor_buffer) >= 3){
-				if(read_byte() == 0x9A && read_byte() == 0x02 && read_byte() == 0x6B){
-					return 1;
-				}
-				else{
-					return 0;
-				}
-					
+			if(read_byte() == 0x9A && read_byte() == 0x02 && read_byte() == 0x6B){
+				return 1;
 			}
+			else{
+				return 0;
+			}
+		}		
+			
         }
     }
     return 0;
@@ -55,14 +55,13 @@ static uint8_t read_byte(void){
     while(GetBufBitsNoRead(&serial_motor_buffer) != 0){
         if(read_byte() == id ){
 			while(GetBufBitsNoRead(&serial_motor_buffer) >= 3){
-				if(read_byte() == 0xFD && read_byte() == 0x02 && read_byte() == 0x6B){
-					return 1;
-				}
-				else{
-					return 0;
-				}
-					
+			if(read_byte() == 0xFD && read_byte() == 0x02 && read_byte() == 0x6B){
+				return 1;
 			}
+			else{
+				return 0;			
+			}
+		}
         }
     }
     return 0;
@@ -82,7 +81,6 @@ static uint8_t read_byte(void){
 				else{
 					return 0;
 				}
-					
 			}
         }
     }
@@ -105,6 +103,7 @@ static uint8_t read_byte(void){
 				}
 					
 			}
+			
         }
     }
     return 0;
@@ -265,7 +264,7 @@ uint8_t motor_read_get_flag_set0(uint8_t id){
                         return result;
                     }
                     serial_motor_buffer.read_index = (serial_motor_buffer.read_index + 2) % serial_motor_buffer.rec_size;
-                }
+				} 
             }
         }
     }
@@ -297,7 +296,7 @@ uint8_t motor_read_get_flag_arrive(uint8_t id){
                         return result;
                     }
                     serial_motor_buffer.read_index = (serial_motor_buffer.read_index + 2) % serial_motor_buffer.rec_size;
-                }
+				}  
             }
         }
     }

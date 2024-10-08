@@ -25,7 +25,6 @@ typedef struct{
     uint8_t decode_size;
 }serial_motor_buffer_t;
 
-
 uint8_t motor_init(serial_motor_buffer_t* serial_motor_buffer);
 
 uint8_t motor_move_speed(uint8_t id, uint8_t direction, uint16_t speed);
