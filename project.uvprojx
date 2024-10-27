@@ -720,14 +720,54 @@
           <GroupName>Hardware</GroupName>
           <Files>
             <File>
-              <FileName>bsp_motor.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Hardware\bsp_motor.h</FilePath>
+              <FileName>motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\motor.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_motor.c</FileName>
+              <FileName>motor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\motor.h</FilePath>
+            </File>
+            <File>
+              <FileName>serial_openmv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Hardware\bsp_motor.c</FilePath>
+              <FilePath>.\Hardware\serial_openmv.c</FilePath>
+            </File>
+            <File>
+              <FileName>serial_openmv.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\serial_openmv.h</FilePath>
+            </File>
+            <File>
+              <FileName>key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\key.c</FilePath>
+            </File>
+            <File>
+              <FileName>key.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\key.h</FilePath>
+            </File>
+            <File>
+              <FileName>led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\led.c</FilePath>
+            </File>
+            <File>
+              <FileName>led.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\led.h</FilePath>
+            </File>
+            <File>
+              <FileName>motor_covering_round.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\motor_covering_round.c</FilePath>
+            </File>
+            <File>
+              <FileName>motor_covering_round.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\motor_covering_round.h</FilePath>
             </File>
             <File>
               <FileName>pump.c</FileName>
@@ -740,14 +780,24 @@
               <FilePath>.\Hardware\pump.h</FilePath>
             </File>
             <File>
-              <FileName>serial_openmv.c</FileName>
+              <FileName>servos_body.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Hardware\serial_openmv.c</FilePath>
+              <FilePath>.\Hardware\servos_body.c</FilePath>
             </File>
             <File>
-              <FileName>serial_openmv.h</FileName>
+              <FileName>servos_body.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Hardware\serial_openmv.h</FilePath>
+              <FilePath>.\Hardware\servos_body.h</FilePath>
+            </File>
+            <File>
+              <FileName>servos_covering.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\servos_covering.c</FilePath>
+            </File>
+            <File>
+              <FileName>servos_covering.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\servos_covering.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -763,6 +813,11 @@
               <FileName>position.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\MiddleWare\position.c</FilePath>
+            </File>
+            <File>
+              <FileName>position_axis.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\MiddleWare\position_axis.h</FilePath>
             </File>
           </Files>
         </Group>

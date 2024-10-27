@@ -14,6 +14,8 @@
         "type_traits": "c",
         "utility": "c",
         "bsp_motor.h": "c",
-        "delay.h": "c"
+        "delay.h": "c",
+        "servos_body.h": "c",
+        "servos_covering.h": "c"
     }
 }

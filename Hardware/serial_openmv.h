@@ -14,14 +14,14 @@ typedef struct{
 }serial_openmv_buffer_t;
 
 typedef enum {
-    pill_red,
+    pill_red = 0,
     pill_green,
     pill_blue,
-    bottle_body,
-    bottle_cover,
+//    bottle_body,
+//    bottle_cover,
 }state_openmv_t;
 
-uint8_t openmv_init(void);
+uint8_t openmv_init(serial_openmv_buffer_t *serial_openmv_buffer);
 
 uint8_t openmv_read(void);
 

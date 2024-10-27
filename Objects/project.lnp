@@ -29,9 +29,16 @@
 ".\objects\stm32f10x_wwdg.o"
 ".\objects\delay.o"
 ".\objects\oled.o"
-".\objects\bsp_motor.o"
+".\objects\serialdebug.o"
+".\objects\motor.o"
+".\objects\serial_openmv.o"
+".\objects\key.o"
+".\objects\led.o"
+".\objects\motor_covering_round.o"
 ".\objects\pump.o"
-".\objects\serial_blueteeth.o"
+".\objects\servos_body.o"
+".\objects\servos_covering.o"
+".\objects\position.o"
 --strict --scatter ".\Objects\project.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

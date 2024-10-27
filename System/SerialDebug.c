@@ -10,7 +10,7 @@
 #define SerialDebug_ClkCmd RCC_APB1PeriphClockCmd
 #define SerialDebug_Clk RCC_APB1Periph_USART3
 
-#define SerialDebug_BaudRate 9600
+#define SerialDebug_BaudRate 115200
 
 #define SerialDebug_GPIO_ClkCmd RCC_APB2PeriphClockCmd
 #define SerialDebug_GPIO_Clk RCC_APB2Periph_GPIOB
@@ -20,7 +20,7 @@
 
 uint8_t SerialDebug_ReceiveData;  
 
-void SerialDebug_Init(){
+void SerialDebug_Init(void){
     SerialDebug_GPIO_ClkCmd(SerialDebug_GPIO_Clk,ENABLE);
 
     GPIO_InitTypeDef GPIO_InitStucture;
@@ -47,7 +47,7 @@ void SerialDebug_Init(){
 
     USART_ITConfig(SerialDebug_Port,USART_IT_RXNE,ENABLE);    
 
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 
     NVIC_InitTypeDef NVIC_InitStruture;
     NVIC_InitStruture.NVIC_IRQChannel = SerialDebug_IRQn;

@@ -1,5 +1,5 @@
 .\objects\position.o: MiddleWare\position.c
-.\objects\position.o: .\Hardware\bsp_motor.h
+.\objects\position.o: MiddleWare\position.h
 .\objects\position.o: .\Start\stm32f10x.h
 .\objects\position.o: .\Start\core_cm3.h
 .\objects\position.o: D:\Keil 5\keil 5\Core\ARM\ARMCC\Bin\..\include\stdint.h
@@ -29,4 +29,3 @@
 .\objects\position.o: .\Library\stm32f10x_usart.h
 .\objects\position.o: .\Library\stm32f10x_wwdg.h
 .\objects\position.o: .\Library\misc.h
-.\objects\position.o: MiddleWare\position.h

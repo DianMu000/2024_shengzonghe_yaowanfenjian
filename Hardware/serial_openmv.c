@@ -48,7 +48,7 @@ uint8_t openmv_init(serial_openmv_buffer_t *serial_openmv_buffer)
 
     USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
 
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 
     NVIC_InitTypeDef NVIC_InitStructure;
     NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
@@ -72,29 +72,29 @@ uint8_t openmv_read(void)
 {
     while(GetBufBitsNoRead(&serial_openmv_buffer) != 0){
         if(read_byte() == 0x60){
-            while(GetBufBitsNoRead(&serial_openmv_buffer) < 6){
+            while(GetBufBitsNoRead(&serial_openmv_buffer) >= 6){
                 if(read_byte() == 0x00){
-                    return 0;
+                    return 1;//接受到数据帧，无数据
                 }
                 else{
-                    serial_openmv_buffer.decode_buf[0] = (int16_t)(read_byte() << 8) | (int16_t)(read_byte());
-                    serial_openmv_buffer.decode_buf[1] = (int16_t)(read_byte() << 8) | (int16_t)(read_byte());
+                    serial_openmv_buffer.decode_buf[0] = (int16_t)(read_byte() << 8)  | (int16_t)read_byte();
+                    serial_openmv_buffer.decode_buf[1] = (int16_t)(read_byte() << 8)  | (int16_t)read_byte();
                 }
                 if(read_byte() == 0x6B){
-                    return 1;
+                    return 0;//接受到数据帧，有数据，校验位正确
                 }
-                else return 0;
+                else return 2;//接受到数据帧，有数据，校验位错误
             }
         } 
     }
-    return 0;
+    return 3;//无数据进入缓冲区
 }
 
 uint8_t openmv_send(state_openmv_t state)
 {
     SendByte(0x60);
     SendByte(state);
-    Senfbyte(0x6B);
+    SendByte(0x6B);
 
     return 0;
 }

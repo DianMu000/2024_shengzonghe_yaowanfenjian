@@ -29,7 +29,14 @@
 .\objects\main.o: .\Library\stm32f10x_wwdg.h
 .\objects\main.o: .\Library\misc.h
 .\objects\main.o: .\System\Delay.h
-.\objects\main.o: .\System\OLED.h
-.\objects\main.o: .\Hardware\bsp_motor.h
-.\objects\main.o: .\Hardware\serial_blueteeth.h
+.\objects\main.o: .\Hardware\motor.h
+.\objects\main.o: .\Hardware\serial_openmv.h
+.\objects\main.o: .\Hardware\key.h
+.\objects\main.o: .\Hardware\led.h
+.\objects\main.o: .\Hardware\motor_covering_round.h
 .\objects\main.o: .\Hardware\pump.h
+.\objects\main.o: .\Hardware\servos_body.h
+.\objects\main.o: .\Hardware\servos_covering.h
+.\objects\main.o: .\MiddleWare\position.h
+.\objects\main.o: .\MiddleWare\position_axis.h
+.\objects\main.o: .\System\SerialDebug.h

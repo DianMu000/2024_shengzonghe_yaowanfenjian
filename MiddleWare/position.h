@@ -2,44 +2,77 @@
 #define __POSITION_H
 #include "stm32f10x.h"
 
-/******************config***********************/
-#define position_approach_method pid //选择“pid”或则“absolute”
 
-#define position_PID_p 0  
-#define position_PID_i 0 
-#define position_PID_d 0
+#define NULL 0
 
-#define position_absolute_factor 0
-/******************endconfig***********************/
+/// @brief 方向极性枚举
+typedef enum {
+    positive = 0,
+    negative = 1,
+}polarity_t;
 
-
+/// @brief position接口结构体
 typedef struct{
-    uint8_t (*move_x) (int16_t distance, uint8_t speed);
-    uint8_t (*move_y) (int16_t distance, uint8_t speed);
-}position_intereface_t;
+    /// @brief 在move_函数中，可以使用polarity控制正反转的极性，以与坐标系方向统一
+    uint8_t (*pfmove_x) (uint8_t dircetion, uint16_t speed, float distance);
+    uint8_t (*pfmove_y) (uint8_t dircetion, uint16_t speed, float distance);
+    uint8_t (*pfmove_z) (uint8_t dircetion, uint16_t speed, float distance);
+    uint8_t (*pfget_flag_move) (void);
+    uint8_t (*pfget_flag_set0) (void);
+}position_interface_t;
 
+
+/// @brief position信息结构体
 typedef struct{
-    int16_t position_x;
-    int16_t position_y;
-    int16_t position_x_max;
-    int16_t position_x_min;
-    int16_t position_y_max;
-    int16_t position_y_min;
+    float position_x;
+    float position_y;
+    float position_z;
+
+    float position_x_max;
+    float position_x_min;
+    float position_y_max;
+    float position_y_min;
+    float position_z_max;
+    float position_z_min;
 }position_inf_t;
 
-typedef struct {
-    position_intereface_t position_intereface;
-    position_inf_t position_inf;
 
-    uint8_t (*move_to) (int16_t position_x, int16_t position_y);
-    uint8_t (*get_position) (uint16_t *position_x, uint16_t *position_y);
-    uint8_t (*move_x) (uint16_t speed, int16_t position);
-    uint8_t (*move_y) (uint16_t speed, int16_t position);
+/// @brief position配置结构体
+typedef struct 
+{
+    polarity_t polarity_x;
+    polarity_t polarity_y;
+    polarity_t polarity_z;
+}position_conf_t;
+
+/// @brief position结构体
+typedef struct position_t{
+    position_interface_t position_interface;
+    position_inf_t position_inf;
+    position_conf_t position_conf;
+
+    uint8_t (*pfmove_to_xy) (struct position_t *position, float position_x_target, float position_y_target, uint16_t speed);
+    uint8_t (*pfmove_to_z) (struct position_t *position,float position_z_target, uint16_t speed);
+    uint8_t (*pfget_position) (struct position_t *position, float *pposition_x, float *pposition_y, float *pposition_z); 
+    uint8_t (*pfmove_x) (struct position_t *position, uint8_t direction, uint16_t speed, float distance);
+    uint8_t (*pfmove_y) (struct position_t *position, uint8_t direction, uint16_t speed, float distance);
+    uint8_t (*pfmove_z) (struct position_t *position, uint8_t direction, uint16_t speed, float distance);
+    uint8_t (*pfget_flag_move) (struct position_t *position);
+    uint8_t (*pfget_flag_set0) (struct position_t *position);
 }position_t;
 
-
-
-uint8_t position_initialize(position_t* position, position_intereface_t *position_intereface, position_inf_t *position_inf);
-
+/// @brief 结构体初始化
+/// @param position 初始化的结构体
+/// @param position_interface 接口函数结构体
+/// @param position_conf 配置结构体
+/// @param position_x_max x轴的最大值
+/// @param position_x_min x轴的最小值
+/// @param position_y_max y轴的最大值
+/// @param position_y_min y轴的最小值
+/// @param position_z_max z轴的最大值
+/// @param position_z_min z轴的最小值
+/// @return 
+uint8_t position_initialize(position_t *position, position_interface_t *position_interface, position_conf_t *position_conf,
+float position_x_max, float position_x_min, float position_y_max, float position_y_min, float position_z_max, float position_z_min);
 
 #endif

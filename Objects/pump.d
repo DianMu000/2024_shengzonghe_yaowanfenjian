@@ -1,4 +1,5 @@
 .\objects\pump.o: Hardware\pump.c
+.\objects\pump.o: Hardware\pump.h
 .\objects\pump.o: .\Start\stm32f10x.h
 .\objects\pump.o: .\Start\core_cm3.h
 .\objects\pump.o: D:\Keil 5\keil 5\Core\ARM\ARMCC\Bin\..\include\stdint.h

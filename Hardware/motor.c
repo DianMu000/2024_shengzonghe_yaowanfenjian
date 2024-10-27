@@ -1,4 +1,4 @@
-#include "bsp_motor.h"
+#include "motor.h"
 #include "stdlib.h"
 #include "delay.h"
 extern serial_motor_buffer_t serial_motor_buffer;
@@ -136,7 +136,7 @@ uint8_t motor_init(serial_motor_buffer_t* serial_motor_buffer){
 
     USART_ITConfig(USART1,USART_IT_RXNE,ENABLE);
     
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 
     NVIC_InitTypeDef NVIC_InitStructure;
     NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
@@ -166,17 +166,19 @@ uint8_t motor_init(serial_motor_buffer_t* serial_motor_buffer){
 /// @param speed 速度
 /// @return 
 uint8_t motor_move_speed(uint8_t id, uint8_t direction, uint16_t speed){
-    do{  
+//    do{  
         SendByte(id);
         SendByte(0xf6);
         SendByte(direction);
+		
+		SendByte((uint8_t)(speed & 0x00ff));
         SendByte((uint8_t)(speed >> 8) & 0x00ff);
-        SendByte((uint8_t)(speed & 0x00ff));
+       
         SendByte(0x00);
         SendByte(0x00);
         SendByte(0x6B);
-		Delay_ms(8);
-  }while(!motor_read_get_speed_control_recieve(id));
+		Delay_ms(20);
+//  }while(!motor_read_get_speed_control_recieve(id));
     return 0;
 }
 
@@ -186,22 +188,27 @@ uint8_t motor_move_speed(uint8_t id, uint8_t direction, uint16_t speed){
 /// @param pulse 脉冲
 /// @return 
 uint8_t motor_move_position(uint8_t id, uint8_t direction, uint16_t speed, uint32_t pulse){
-    do{
+//    do{
         SendByte(id);
         SendByte(0xFD);
         SendByte(direction);
-        SendByte((uint8_t)((speed >> 8) & 0x00ff));
-        SendByte((uint8_t)(speed & 0x00ff));
+	
+		SendByte((uint8_t)((speed >> 8) & 0x00ff));
+		SendByte((uint8_t)(speed & 0x00ff));
         SendByte(0x00);
-        SendByte((uint8_t)((pulse >> 24) & 0xff));
+		
+	    SendByte((uint8_t)((pulse >> 24) & 0xff));
         SendByte((uint8_t)((pulse >> 16) & 0xff));
         SendByte((uint8_t)((pulse >> 8) & 0xff));
-        SendByte((uint8_t)(pulse & 0xff));
+	    SendByte((uint8_t)(pulse & 0xff));
+
+	
+	
         SendByte(0x00);
         SendByte(0x00);
         SendByte(0x6B);
-		Delay_ms(8);
-    }while(!motor_read_get_position_control_recieve(id));
+		Delay_ms(20);
+//    }while(!motor_read_get_position_control_recieve(id));
 	   
     return 0;
 }
@@ -210,14 +217,14 @@ uint8_t motor_move_position(uint8_t id, uint8_t direction, uint16_t speed, uint3
 /// @param  
 /// @return 
 uint8_t motor_stop(uint8_t id){
-    do{
+//    do{
         SendByte(id);
         SendByte(0xFE);
         SendByte(0x98);
         SendByte(0x00);
         SendByte(0x6B);
-		Delay_ms(8);
-    }while(!motor_read_get_stop_recieve(id));
+		Delay_ms(20);
+//    }while(!motor_read_get_stop_recieve(id));
     return 0;
 }
 
@@ -225,14 +232,14 @@ uint8_t motor_stop(uint8_t id){
 /// @param  
 /// @return 
 uint8_t motor_set0(uint8_t id){
-    do{
+//    do{
         SendByte(id);
         SendByte(0x9A);
         SendByte(0x02);
         SendByte(0x00);
         SendByte(0x6B);
-		Delay_ms(8);
-    }while(!motor_read_get_set0_recieve(id));    
+		Delay_ms(20);
+//    }while(!motor_read_get_set0_recieve(id));    
     return 0;
 
 }
@@ -240,19 +247,19 @@ uint8_t motor_set0(uint8_t id){
 /// @brief 发送回零标志位查询命令
 /// @param  
 /// @return 
-uint8_t motor_send_get_flag_set0(uint8_t id){
+static uint8_t motor_send_get_flag_set0(uint8_t id){
 
         SendByte(id);
         SendByte(0x3B);
         SendByte(0x6B);
-		Delay_ms(8);  
+		Delay_ms(20);  
     return 0;
 } //0x3B
 
 /// @brief 读回零标志位，1为回零成功，0为回零失败
 /// @param  void
 /// @return 1为回零成功，0为回零失败
-uint8_t motor_read_get_flag_set0(uint8_t id){
+static uint8_t motor_read_get_flag_set0(uint8_t id){
     while(GetBufBitsNoRead(&serial_motor_buffer) != 0){
         if(read_byte() == id){
             if(read_byte() == 0x3B){
@@ -270,10 +277,19 @@ uint8_t motor_read_get_flag_set0(uint8_t id){
     }
     return 0;
 }
+
+uint8_t motor_get_flag_set0(uint8_t id){
+	motor_send_get_flag_set0(id);
+	Delay_ms(20);
+	return motor_read_get_flag_set0(id);
+	
+}
+
+
 /// @brief 发送电机标志位查询命令
 /// @param  
 /// @return 
-uint8_t motor_send_get_flag_arrive (uint8_t id) {
+static uint8_t motor_send_get_flag_arrive (uint8_t id) {
         SendByte(id);
         SendByte(0x3A);
         SendByte(0x6B);
@@ -284,14 +300,14 @@ uint8_t motor_send_get_flag_arrive (uint8_t id) {
 /// @brief 读电机位置模式到位标志位，0为未到位，1为到位
 /// @param  void
 /// @return 0为未到位，1为到位
-uint8_t motor_read_get_flag_arrive(uint8_t id){
+static uint8_t motor_read_get_flag_arrive(uint8_t id){
     while(GetBufBitsNoRead(&serial_motor_buffer) != 0){
         if(read_byte() == id){
             if(read_byte() == 0x3A){
                 while(GetBufBitsNoRead(&serial_motor_buffer) >= 2){
                     if(serial_motor_buffer.padd_rec_buf[(serial_motor_buffer.read_index + 1) % serial_motor_buffer.rec_size] == 0x6B){
                         uint8_t flag = serial_motor_buffer.padd_rec_buf[serial_motor_buffer.read_index];
-                        uint8_t result = flag & 0x02;
+                        uint8_t result = (flag & 0x02) >> 1;
                         serial_motor_buffer.read_index = (serial_motor_buffer.read_index + 2) % serial_motor_buffer.rec_size;
                         return result;
                     }
@@ -301,6 +317,12 @@ uint8_t motor_read_get_flag_arrive(uint8_t id){
         }
     }
     return 0;
+}
+
+uint8_t motor_get_flag_arrive (uint8_t id){
+	motor_send_get_flag_arrive(id);
+	Delay_ms(60);
+	return motor_read_get_flag_arrive(id);
 }
 
 /// @brief 串口中断，数据进入缓冲区
